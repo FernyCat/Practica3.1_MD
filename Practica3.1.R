@@ -73,11 +73,32 @@ Node <- function(data, target_name, attribute_names) {
   return(node)
 }
 
+# Construir el árbol de decisión con profundidad máxima 3
+tree <- Node(iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")], "Species", c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"), max_depth = 3)
 
 
+# Método para imprimir el árbol
+print_tree <- function(node, indent = 0) {
+  if (!is.null(node$label)) {
+    cat(paste0(rep("  ", indent), "└─ Nodo hoja - Clase: ", node$label, "\n"))
+  } else {
+    cat(paste0(rep("  ", indent), "├─ Nodo de decisión - Atributo: ", node$split_attribute, "\n"))
+    children_names <- names(node$children)
+    for (i in seq_along(children_names)) {
+      child <- node$children[[children_names[i]]]
+      if (i == length(children_names)) {
+        cat(paste0(rep("  ", indent + 1), "└─ Valor '", children_names[i], "': "))
+        print_tree(child, indent + 1)
+      } else {
+        cat(paste0(rep("  ", indent + 1), "├─ Valor '", children_names[i], "': "))
+        print_tree(child, indent + 1)
+      }
+    }
+  }
+}
 
-
-
+# Imprimir el árbol de decisión con profundidad máxima 3
+print_tree(tree)
 
 
 # Predecir con los datos de prueba
