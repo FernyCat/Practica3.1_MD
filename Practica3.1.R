@@ -62,4 +62,36 @@ Node <- function(data, target_name, attribute_names) {
   # Encontrar el mejor atributo para dividir
   node$split_attribute <- find_best_split(data, target_name, attribute_names)
   vals <- unique(data[[node$split_attribute]])
+
+    # Crear nodos hijos y recursión
+  for (val in vals) {
+    subset_data <- data[data[[node$split_attribute]] == val, ]
+    subset_data <- subset_data[, !names(subset_data) %in% node$split_attribute]
+    node$children[[as.character(val)]] <- Node(subset_data, target_name, attribute_names)
+  }
+  
+  return(node)
+}
+
+
+
+
+
+
+
+
+# Predecir con los datos de prueba
+predictions <- apply(test_data[, attribute_names], 1, function(row) predict(tree, data.frame(t(row)), default_class))
+
+# Mostrar las predicciones
+print(predictions)
+
+# Crear la matriz de confusión
+conf_matrix <- table(ground_truth = test_data$Species, predicted = predictions)
+print("Matriz de Confusión:")
+print(conf_matrix)
+
+# Calcular la precisión del modelo
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+print(paste("Precisión del modelo:", accuracy))
   
