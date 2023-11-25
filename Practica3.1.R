@@ -115,4 +115,19 @@ print(conf_matrix)
 # Calcular la precisión del modelo
 accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
 print(paste("Precisión del modelo:", accuracy))
+
+#rpart
+
+#install.packages("rpart")
+#install.packages("rpart.plot")
+
+library(rpart)
+library(rpart.plot)
+
+# Construir el árbol de decisión
+tree_model <- rpart(Species ~ ., data = iris, method = "class", control = rpart.control(maxdepth = 3))
+
+# Visualizar el árbol de decisión
+rpart.plot(tree_model, box.palette = "auto")
+
   
