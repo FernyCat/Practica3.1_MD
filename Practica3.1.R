@@ -47,4 +47,19 @@ find_best_split <- function(data, target_name, attribute_names) {
   
   return(best_attribute)
 }
-
+# Clase Nodo para construir el árbol
+Node <- function(data, target_name, attribute_names) {
+  node <- list()
+  node$split_attribute <- NULL
+  node$children <- list()
+  
+  # Verificar si los datos son homogéneos o no
+  if (length(unique(data[[target_name]])) == 1) {
+    node$label <- unique(data[[target_name]])
+    return(node)
+  }
+  
+  # Encontrar el mejor atributo para dividir
+  node$split_attribute <- find_best_split(data, target_name, attribute_names)
+  vals <- unique(data[[node$split_attribute]])
+  
